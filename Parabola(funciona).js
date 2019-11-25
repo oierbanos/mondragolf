@@ -1,4 +1,3 @@
-/* Burak Kanber */
 var width = window.innerWidth;
 var height = window.innerHeight;
 var canvas = ctx = false;
@@ -8,6 +7,7 @@ var loopTimer = false;
 
 
 /*
+hola don pepito
  * Experiment with values of mass, radius, restitution,
  * gravity (g), and density (rho)!
  * 
