@@ -22,7 +22,7 @@ var loopTimer = false;
  */
 var ball = {
     position: {x: 0, y: 300},
-    velocity: {x: 10, y: 0},
+    velocity: {x: 0, y: 0},
     mass: 0.045, //kg
     radius: 4.3, // 1px = 1cm
     restitution: -0.35
