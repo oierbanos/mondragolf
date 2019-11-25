@@ -10,10 +10,10 @@ var loopTimer = false;
 hola don pepito
  * Experiment with values of mass, radius, restitution,
  * gravity (g), and density (rho)!
- * 
+ *
  * Changing the constants literally changes the environment
- * the ball is in. 
- * 
+ * the ball is in.
+ *
  * Some settings to try:
  * the moon: g = 1.6
  * water: rho = 1000, mass 5
@@ -21,14 +21,14 @@ hola don pepito
  * lead ball: mass 10, restitution -0.05
  */
 var ball = {
-    position: {x: 0, y: 300},
+    position: {x: 100, y: height - 100},
     velocity: {x: 0, y: 0},
     mass: 0.045, //kg
     radius: 4.3, // 1px = 1cm
-    restitution: -0.35
-    };
+    restitution: -0.2,
+    }
 
-//Constantes necesarias para las 
+//Constantes necesarias para las
 var ResisAire = 0.47;  // Resistencia que opone una esfera
 var Vol = (4/3)*Math.PI*ball.radius*ball.radius*ball.radius;
 var rho = ball.mass/Vol; // Densidad
@@ -50,7 +50,7 @@ var mouseDown = function(e) {
   		mouseclick.y = e.pageY;
     }
 }
-var mouseUp = function(e) { 
+var mouseUp = function(e) {
     if (e.which == 1) {
         mouse.isDown = false;
         ball.velocity.y = (mouseclick.y - mouse.y) /20;
@@ -61,17 +61,17 @@ var mouseUp = function(e) {
 var setup = function() {
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
-    
+
     canvas.onmousemove = getMousePosition;
     canvas.onmousedown = mouseDown;
     canvas.onmouseup = mouseUp;
 	canvas.height = height;
 	canvas.width = width;
-	
+
 	setInterval(rodarsuelo, 15); //Que la función se haga cada 15ms
-	
-	
-    
+
+
+
     ctx.fillStyle = 'red';
     ctx.strokeStyle = '#000000';
     loopTimer = setInterval(loop, frameDelay);
@@ -80,31 +80,31 @@ var setup = function() {
 //Reducir velocidad cuando no bota
 function rodarsuelo(){
 	if (ball.position.y > height-101 - ball.radius){ //Cuando esté en entre el suelo y la altura de 1px
-		ball.velocity.x *= 0.98; //Se hace solo x0.98 porque se hace cada 15ms, cuanto mayor sea el intervalo, menor la multiplicación, se haría x 0.95 (por ejemplo)
+		ball.velocity.x *= 0.50; //Se hace solo x0.98 porque se hace cada 15ms, cuanto mayor sea el intervalo, menor la multiplicación, se haría x 0.95 (por ejemplo)
 	}
 }
-	
+
 var loop = function() {
     if ( ! mouse.isDown) {
-		
+
             // Calcular fuerzas: Fd = -1/2 * ResisAire * A * rho * v^2
         var Fx = -0.5 * ResisAire * A * rho * Math.abs(ball.velocity.x * ball.velocity.x);
         var Fy = -0.5 * ResisAire * A * rho * Math.abs(ball.velocity.y * ball.velocity.y);
-        
-		
+
+
 		// Calcular aceleracion
         var ax = Fx / ball.mass;
         var ay = g + (Fy / ball.mass);
-		
+
         // Conseguir nueva velocidad
         ball.velocity.x += ax*frameRate;
         ball.velocity.y += ay*frameRate;
-        
+
         // Conseguir nueva posicion
         ball.position.x += ball.velocity.x*frameRate*40;
         ball.position.y += ball.velocity.y*frameRate*40;
     }
-	
+
     // Collisiones
     if (ball.position.y > height-100 - ball.radius) {
 			ball.velocity.y *= ball.restitution; //Que bote tendrá
@@ -113,27 +113,27 @@ var loop = function() {
     if (ball.position.x > 900 - ball.radius) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
 			ball.velocity.x = 0; //Empieza parada
 			ball.position.x = 100 + ball.radius;
-			ball.position.y = height-100 + ball.radius; 
+			ball.position.y = height-100 + ball.radius;
     }
     if (ball.position.x < ball.radius) {
 			ball.velocity.x *= ball.restitution; //Rebote pared
-			ball.position.x = ball.radius; 
+			ball.position.x = ball.radius;
     }
 
-	
-	
-	
+
+
+
     // Dibujar pelota
     ctx.clearRect(0,0,width,height);
-    
+
     ctx.save();
-    
+
     ctx.translate(ball.position.x, ball.position.y);
     ctx.beginPath(); //Que se borre todas las pelotas viejas
     ctx.arc(0, 0, ball.radius, 0, Math.PI*2, true);
     ctx.fill(); //Redibujar la bola
     ctx.closePath();
-    
+
     ctx.restore();
 
 
@@ -145,6 +145,6 @@ var loop = function() {
         ctx.stroke();
         ctx.closePath();
     }
-    
+
 }
     setup();
