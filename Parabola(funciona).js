@@ -25,8 +25,10 @@ var ball = {
     velocity: {x: 0, y: 0},
     mass: 0.045, //kg
     radius: 4.3, // 1px = 1cm
-    restitution: -0.2,
+    restitution: -0.7,
+	restitutionarena: -0.2,
     }
+	
 
 //Constantes necesarias para las
 var ResisAire = 0.47;  // Resistencia que opone una esfera
@@ -80,8 +82,13 @@ var setup = function() {
 //Reducir velocidad cuando no bota
 function rodarsuelo(){
 	if (ball.position.y > height-101 - ball.radius){ //Cuando esté en entre el suelo y la altura de 1px
-		ball.velocity.x *= 0.50; //Se hace solo x0.98 porque se hace cada 15ms, cuanto mayor sea el intervalo, menor la multiplicación, se haría x 0.95 (por ejemplo)
+		ball.velocity.x *= 0.95; //Se hace solo x0.98 porque se hace cada 15ms, cuanto mayor sea el intervalo, menor la multiplicación, se haría x 0.95 (por ejemplo)
+		if (ball.position.x >= 500 && ball.position.x <= 900){
+			ball.velocity.x *= 0.60;
+		}
+		
 	}
+
 }
 
 var loop = function() {
@@ -106,23 +113,40 @@ var loop = function() {
     }
 
     // Collisiones
-    if (ball.position.y > height-100 - ball.radius) {
-			ball.velocity.y *= ball.restitution; //Que bote tendrá
-			ball.position.y = height-100 - ball.radius; //Que no traspase el suelo
-    }
-    if (ball.position.x > 900 - ball.radius) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
-			ball.velocity.x = 0; //Empieza parada
-			ball.position.x = 100 + ball.radius;
-			ball.position.y = height-100 + ball.radius;
-    }
-    if (ball.position.x < ball.radius) {
-			ball.velocity.x *= ball.restitution; //Rebote pared
-			ball.position.x = ball.radius;
-    }
-
-
-
-
+	if (ball.position.x >= 500 && ball.position.x <= 900){
+		if (ball.position.y > height-100 - ball.radius) {
+				ball.velocity.y *= ball.restitutionarena; //Que bote tendrá
+				ball.position.y = height-100 - ball.radius; //Que no traspase el suelo
+		}
+		if (ball.position.x > 900 - ball.radius) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
+				ball.velocity.x = 0; //Empieza parada
+				ball.position.x = 100 + ball.radius;
+				ball.position.y = height-100 + ball.radius;
+		}
+		if (ball.position.x < ball.radius) {
+				ball.velocity.x *= ball.restitutionarena; //Rebote pared
+				ball.position.x = ball.radius;
+		}
+	}
+	else{
+		if (ball.position.y > height-100 - ball.radius) {
+				ball.velocity.y *= ball.restitution; //Que bote tendrá
+				ball.position.y = height-100 - ball.radius; //Que no traspase el suelo
+		}
+		if (ball.position.x > 900 - ball.radius) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
+				ball.velocity.x = 0; //Empieza parada
+				ball.position.x = 100 + ball.radius;
+				ball.position.y = height-100 + ball.radius;
+		}
+		if (ball.position.x < ball.radius) {
+				ball.velocity.x *= ball.restitution; //Rebote pared
+				ball.position.x = ball.radius;
+		}
+	}
+    
+		
+	
+	
     // Dibujar pelota
     ctx.clearRect(0,0,width,height);
 
@@ -136,7 +160,12 @@ var loop = function() {
 
     ctx.restore();
 
-
+	
+	
+	
+	ctx.moveTo(500, height-100);
+	ctx.lineTo(900, height-100);
+	ctx.stroke();
     // Dibujar línea de angulo y potencia
     if (mouse.isDown) {
         ctx.beginPath();
