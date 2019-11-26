@@ -9,8 +9,11 @@ var img = new Image();
 	img.src = 'api.png';
 var pelota = new Image();
 	pelota.src = 'pelota.png';
-var pelota_gif = new GIF();
-	pelota_gif.src = 'BolaGolf_gif.gif';
+var sol = new Image();
+	sol.src = 'Sol.png';
+var warning = new Image();
+	warning.src = 'Warning.png';
+
 
 
 /*
@@ -28,7 +31,7 @@ var pelota_gif = new GIF();
  */
  
 var ball = {
-    position: {x: 100, y: height-40},
+    position: {x: 100, y: height-50},
     velocity: {x: 0, y: 0},
     mass: 0.045, //kg
     radius: 4.3, // 1px = 1cm
@@ -49,15 +52,14 @@ function getMousePosition(e) {
     mouse.y = e.pageY;
 }
 
+
 function onloadfuntzioak(){
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	height = canvas.height;
 	width = canvas.width;
-
-	ctx.drawImage(img, 0, canvas.height-150, 900, 150);
+	
 	ctx.drawImage(pelota, 99, canvas.height-49, 9, 9);
-	ctx.drawImage(pelota_gif, 100, canvas.height-150, 510, 509);
 }
 
 var mouseDown = function(e) {
@@ -73,6 +75,7 @@ var mouseUp = function(e) {
         mouse.isDown = false;
         ball.velocity.y = (mouseclick.y - mouse.y) /20;
         ball.velocity.x = (mouseclick.x - mouse.x) /20;
+		hasiera = false;
     }
 }
 
@@ -96,13 +99,22 @@ var setup = function() {
 //Reducir velocidad cuando no bota
 function rodarsuelo(){
 	
-	if (ball.position.y > height-41 - ball.radius){ //Cuando esté en entre el suelo y la altura de 1px
+	if (ball.position.y > height-51 - ball.radius){ //Cuando esté en entre el suelo y la altura de 1px
 		ball.velocity.x *= 0.97; //Se hace solo x0.97 porque se hace cada 15ms, cuanto mayor sea el intervalo, menor la multiplicación, se haría x 0.95 (por ejemplo)
 	}
-	if (ball.velocity.x == 0){
-		ingame = false;
-    }
-	else ingame = true;
+}
+
+function color(){
+	
+	if(Math.abs(mouseclick.x-mouse.x) + Math.abs(mouseclick.y-mouse.y) < 200 ){
+		ctx.strokeStyle = 'green';
+	}
+	if(Math.abs(mouseclick.x-mouse.x) + Math.abs(mouseclick.y-mouse.y) > 200 && Math.abs(mouseclick.x-mouse.x) + Math.abs(mouseclick.y-mouse.y) < 500){
+		ctx.strokeStyle = 'yellow';
+	}
+	if(Math.abs(mouseclick.x-mouse.x) + Math.abs(mouseclick.y-mouse.y) > 500){
+		ctx.strokeStyle = 'red';
+	}
 }
 
 	
@@ -128,15 +140,15 @@ var loop = function() {
     }
 	
     // Collisiones
-    if (ball.position.y > height-40 - ball.radius) {
+    if (ball.position.y > height-50 - ball.radius) {
 			ball.velocity.y *= ball.restitution; //Que bote tendrá
-			ball.position.y = height-40 - ball.radius; //Que no traspase el suelo
+			ball.position.y = height-50 - ball.radius; //Que no traspase el suelo
     }
-    if (ball.position.x > 900 - ball.radius || ball.position.y < -200) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
+    if (ball.position.x > 900 - ball.radius && ball.velocity.x == 0 || ball.position.y < -200 || ball.position.x > width + 500) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
 			ball.velocity.x = 0; //Empieza parada
 			ball.velocity.y = 0;
 			ball.position.x = 100 + ball.radius;
-			ball.position.y = height-40 + ball.radius; 
+			ball.position.y = height-50 + ball.radius; 
     }
     if (ball.position.x < ball.radius) {
 			ball.velocity.x *= ball.restitution; //Rebote pared
@@ -149,16 +161,21 @@ var loop = function() {
 	
 
 	
-    // Dibujar pelota
-    ctx.clearRect(0,0,width,height);
-    onloadfuntzioak();
+    // Limpiar pantalla y redibujar suelo/sol
+	ctx.fillStyle = '#003399';
+    ctx.fillRect(0,0,width,height);
+	ctx.drawImage(warning, 810, height-400, 200, 400);
+    ctx.drawImage(img, 0, canvas.height-150, 2700, 150);
+	ctx.drawImage(sol, width-400, 0, 400, 400);
+	
 	
     ctx.save();
-    
+    //Mover pelota
     ctx.translate(ball.position.x, ball.position.y);
+	ctx.drawImage(pelota, 9, 9)
     ctx.beginPath(); //Que se borre todas las pelotas viejas
     ctx.arc(0, 0, ball.radius, 0, Math.PI*2, true);
-    ctx.fill(); //Redibujar la bola
+
 
     ctx.closePath();
     
@@ -168,7 +185,9 @@ var loop = function() {
     // Dibujar línea de angulo y potencia
     if (mouse.isDown && ball.velocity.x < 0.1) {
         ctx.beginPath();
-        ctx.moveTo(ball.position.x, ball.position.y);
+		ctx.lineWidth = 2;
+		color();
+        ctx.moveTo(ball.position.x + 13, ball.position.y + 13);
         ctx.lineTo(ball.position.x + (mouse.x - mouseclick.x), ball.position.y + (mouse.y - mouseclick.y));
         ctx.stroke();
         ctx.closePath();
