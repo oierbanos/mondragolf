@@ -5,6 +5,13 @@ var canvas = ctx = false;
 var frameRate = 1/40; // Seconds
 var frameDelay = frameRate * 1000; // ms
 
+var img = new Image();
+	img.src = 'api.png';
+var pelota = new Image();
+	pelota.src = 'pelota.png';
+var pelota_gif = new GIF();
+	pelota_gif.src = 'BolaGolf_gif.gif';
+
 
 /*
  * Experiment with values of mass, radius, restitution,
@@ -19,8 +26,9 @@ var frameDelay = frameRate * 1000; // ms
  * beach ball: mass 0.05, radius 30
  * lead ball: mass 10, restitution -0.05
  */
+ 
 var ball = {
-    position: {x: 100, y: height-100},
+    position: {x: 100, y: height-40},
     velocity: {x: 0, y: 0},
     mass: 0.045, //kg
     radius: 4.3, // 1px = 1cm
@@ -41,13 +49,23 @@ function getMousePosition(e) {
     mouse.y = e.pageY;
 }
 
+function onloadfuntzioak(){
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	height = canvas.height;
+	width = canvas.width;
+
+	ctx.drawImage(img, 0, canvas.height-150, 900, 150);
+	ctx.drawImage(pelota, 99, canvas.height-49, 9, 9);
+	ctx.drawImage(pelota_gif, 100, canvas.height-150, 510, 509);
+}
+
 var mouseDown = function(e) {
 	if(e.which == 1 && ball.velocity.x == 0) {
 		getMousePosition(e);
 		mouse.isDown = true;
 		mouseclick.x = e.pageX;
 		mouseclick.y = e.pageY;
-		marra == true;
 	}
 }
 var mouseUp = function(e) {
@@ -65,21 +83,12 @@ var setup = function() {
     canvas.onmousemove = getMousePosition;
 	canvas.onmousedown = mouseDown;
     canvas.onmouseup = mouseUp;
-	canvas.height = height;
-	canvas.width = width;
+	
 	
 	setInterval(rodarsuelo, 15); //Que la función se haga cada 15ms
 	
     ctx.fillStyle = 'red';
     ctx.strokeStyle = '#000000';
-	
-
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = "black";
-	ctx.beginPath();
-	ctx.moveTo(0, height-100);
-	ctx.lineTo(900, height-100);
-	ctx.stroke();
 
     loopTimer = setInterval(loop, frameDelay);
 }
@@ -87,9 +96,13 @@ var setup = function() {
 //Reducir velocidad cuando no bota
 function rodarsuelo(){
 	
-	if (ball.position.y > height-101 - ball.radius){ //Cuando esté en entre el suelo y la altura de 1px
+	if (ball.position.y > height-41 - ball.radius){ //Cuando esté en entre el suelo y la altura de 1px
 		ball.velocity.x *= 0.97; //Se hace solo x0.97 porque se hace cada 15ms, cuanto mayor sea el intervalo, menor la multiplicación, se haría x 0.95 (por ejemplo)
 	}
+	if (ball.velocity.x == 0){
+		ingame = false;
+    }
+	else ingame = true;
 }
 
 	
@@ -115,15 +128,15 @@ var loop = function() {
     }
 	
     // Collisiones
-    if (ball.position.y > height-100 - ball.radius) {
+    if (ball.position.y > height-40 - ball.radius) {
 			ball.velocity.y *= ball.restitution; //Que bote tendrá
-			ball.position.y = height-100 - ball.radius; //Que no traspase el suelo
+			ball.position.y = height-40 - ball.radius; //Que no traspase el suelo
     }
     if (ball.position.x > 900 - ball.radius || ball.position.y < -200) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
 			ball.velocity.x = 0; //Empieza parada
 			ball.velocity.y = 0;
 			ball.position.x = 100 + ball.radius;
-			ball.position.y = height-100 + ball.radius; 
+			ball.position.y = height-40 + ball.radius; 
     }
     if (ball.position.x < ball.radius) {
 			ball.velocity.x *= ball.restitution; //Rebote pared
@@ -135,11 +148,11 @@ var loop = function() {
 	}
 	
 
-
+	
     // Dibujar pelota
-    ctx.clearRect(0,0,width,height - 100);
-	ctx.clearRect(0,height - 99,width,height);
-    
+    ctx.clearRect(0,0,width,height);
+    onloadfuntzioak();
+	
     ctx.save();
     
     ctx.translate(ball.position.x, ball.position.y);
@@ -160,10 +173,5 @@ var loop = function() {
         ctx.stroke();
         ctx.closePath();
     }
-	
-	if (ball.velocity.x == 0){
-		ingame = false;
-    }
-	else ingame = true;
 }
     setup();
