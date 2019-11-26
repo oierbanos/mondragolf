@@ -102,7 +102,7 @@ var loop = function() {
     if (ball.position.x <= 150 && ball.position.x >= 100 ) {
     		ctx.arc(0, 0, ball.radius, 0, Math.PI*2, true);
         ball.position.y=height++;
-        
+        ball.position.y = height - ball.radius;
     }
     
     // Draw the ball
