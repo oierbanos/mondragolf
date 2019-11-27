@@ -14,7 +14,7 @@ var sol = new Image();
 var warning = new Image();
 	warning.src = 'Warning.png';
 var bandera = new Image();
-	bandera.src = 'Bandera.png';
+	bandera.src = 'Bandera2.png';
 
 
 
@@ -33,7 +33,7 @@ var bandera = new Image();
  */
  
 var ball = {
-    position: {x: 100, y: height-66},
+    position: {x: 100, y: height-64},
     velocity: {x: 0, y: 0},
     mass: 0.045, //kg
     radius: 4.3, // 1px = 1cm
@@ -56,12 +56,26 @@ function getMousePosition(e) {
 
 
 function onloadfuntzioak(){
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	height = canvas.height;
-	width = canvas.width;
+	if(window.innerWidth < 1000){
+		canvas.width = 1000;
+		canvas.height = window.innerHeight;
+		height = canvas.height;
+		width = 1000;
+	}
+	else if(window.innerWidth > 2700){
+		canvas.width = 2700;
+		canvas.height = window.innerHeight;
+		height = canvas.height;
+		width = 2700;
+	}
+	else{
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		height = canvas.height;
+		width = canvas.width;
+	}
 	
-	ctx.drawImage(pelota, 99, canvas.height-49, 9, 9);
+	ctx.drawImage(pelota, 99, canvas.height-64, 9, 9);
 }
 
 var mouseDown = function(e) {
@@ -101,7 +115,7 @@ var setup = function() {
 //Reducir velocidad cuando no bota
 function rodarsuelo(){
 	
-	if (ball.position.y > height-69 - ball.radius){ //Cuando esté en entre el suelo y la altura de 1px
+	if (ball.position.y > height-67 - ball.radius){ //Cuando esté en entre el suelo y la altura de 1px
 		ball.velocity.x *= 0.97; //Se hace solo x0.97 porque se hace cada 15ms, cuanto mayor sea el intervalo, menor la multiplicación, se haría x 0.95 (por ejemplo)
 	}
 }
@@ -142,15 +156,15 @@ var loop = function() {
     }
 	
     // Collisiones
-    if (ball.position.y > height-66 - ball.radius) {
+    if (ball.position.y > height-64 - ball.radius) {
 			ball.velocity.y *= ball.restitution; //Que bote tendrá
-			ball.position.y = height-66 - ball.radius; //Que no traspase el suelo
+			ball.position.y = height-64 - ball.radius; //Que no traspase el suelo
     }
     if (ball.position.x > width - 200 - ball.radius && ball.velocity.x == 0 || ball.position.y < -200 || ball.position.x > width + 400 || ball.position.x < -200 || (ball.position.x < 0 && ball.velocity.x == 0)) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
 			ball.velocity.x = 0; //Empieza parada
 			ball.velocity.y = 0;
 			ball.position.x = 100 + ball.radius;
-			ball.position.y = height-66 + ball.radius; 
+			ball.position.y = height-64 + ball.radius; 
     }
 	if ( ball.velocity.x < 0.15 && ball.velocity.x > -0.15){
 		ball.velocity.x = 0;
@@ -162,21 +176,28 @@ var loop = function() {
 			height = canvas.height;
 			width = 1000;
 		}
+		else if(window.innerWidth > 2700){
+			canvas.width = 2700;
+			canvas.height = window.innerHeight;
+			height = canvas.height;
+			width = 2700;
+		}
 		else{
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
 			height = canvas.height;
 			width = canvas.width;
 		}
-	}	
+	}
 
 	
     // Limpiar pantalla y redibujar suelo/sol
 	ctx.fillStyle = '#003399';
     ctx.fillRect(0,0,width,height);
 	ctx.drawImage(warning, width - 200, height-200, 100, 200);0
-	ctx.drawImage(bandera, width - 500, height-130, 28, 90);
+	
     ctx.drawImage(img, 0, canvas.height-150, 2700, 150);
+	ctx.drawImage(bandera, width - 500, height-121, 28, 130);
 
 	ctx.drawImage(sol, width-400, 0, 400, 400);
 	
@@ -200,7 +221,7 @@ var loop = function() {
 		ctx.lineWidth = 2;
 		color();
         ctx.moveTo(ball.position.x + 20, ball.position.y + 20);
-        ctx.lineTo(ball.position.x + (mouse.x - mouseclick.x), ball.position.y + (mouse.y - mouseclick.y));
+        ctx.lineTo(ball.position.x + 20 +(mouse.x - mouseclick.x), ball.position.y + 20 +(mouse.y - mouseclick.y));
         ctx.stroke();
         ctx.closePath();
     }
