@@ -10,7 +10,7 @@ var img = new Image();
 
 
 /*
- * Experiment with values of mass, radius, restitution,
+ * Experiment with values of mass, radius, rebotividad,
  * gravity (g), and density (rho)!
  * 
  * Changing the constants literally changes the environment
@@ -20,7 +20,7 @@ var img = new Image();
  * the moon: g = 1.6
  * water: rho = 1000, mass 5
  * beach ball: mass 0.05, radius 30
- * lead ball: mass 10, restitution -0.05
+ * lead ball: mass 10, rebotividad -0.05
  */
  
 var ball = {
@@ -28,7 +28,7 @@ var ball = {
     velocity: {x: 0, y: 0},
     mass: 0.045, //kg
     radius: 4.3, // 1px = 1cm
-    restitution: -0.35
+    rebotividad: -0.35 // capacidad que tiene la pelotita de rebotar (-1 --> rebota mucho, 0 --> no rebota)
     };
 
 //Constantes necesarias para las 
@@ -116,7 +116,7 @@ var loop = function() {
         var ay = g + (Fy / ball.mass);
 		
         // Conseguir nueva velocidad
-        ball.velocity.x += ax*frameRate;
+        ball.velocity.x += ax*frameRate; // a = v*t
         ball.velocity.y += ay*frameRate;
         
         // Conseguir nueva posicion
@@ -126,7 +126,7 @@ var loop = function() {
 	
     // Collisiones
     if (ball.position.y > height-40 - ball.radius) {
-			ball.velocity.y *= ball.restitution; //Que bote tendrá
+			ball.velocity.y *= ball.rebotividad; //Que bote tendrá
 			ball.position.y = height-40 - ball.radius; //Que no traspase el suelo
     }
     if (ball.position.x > 900 - ball.radius || ball.position.y < -200) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
