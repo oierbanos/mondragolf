@@ -136,8 +136,10 @@ var loop = function() {
 			ball.position.y = height-40 + ball.radius; 
     }
     if (ball.position.x < ball.radius) {
-			ball.velocity.x *= ball.restitution; //Rebote pared
-			ball.position.x = ball.radius; 
+        ball.velocity.x = 0; //Empieza parada
+        ball.velocity.y = 0;
+        ball.position.x = 100 + ball.radius;
+        ball.position.y = height-40 + ball.radius; 
     }
 	if ( ball.velocity.x < 0.15 && ball.velocity.x > -0.15){
 		ball.velocity.x = 0;
