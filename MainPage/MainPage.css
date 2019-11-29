@@ -1,0 +1,65 @@
+body {
+	background-image: url("Imagen/Background.jpg");
+	background-size: 100%;
+	background-position: 0% 10%;
+	background-repeat: no-repeat;
+	background-color: rgb(45, 45, 45);
+	font-family: "Times New Roman", Times, serif;
+}
+
+div {
+	position: relative;
+}
+
+div#title {
+	max-width: 600px;
+	margin: auto;
+	font-size: 28px;
+	text-align: center;
+	display: block;
+	top: 60px;
+}
+
+h1 {
+	color: rgb(255, 255, 255);
+	text-align: center;
+	margin-top: 60px;
+	margin-bottom: 15px;
+	font-size: 50px;
+	/*text-decoration: overline underline;*/ 
+}
+
+
+div#links {
+	max-width: 300px;
+	margin: auto;
+	font-size: 28px;
+	text-align: center;
+	position: fixed;
+	top: 50%;
+	left: 43%;
+}
+
+span.Zeldas {
+	display: block;
+	margin-bottom: 45px;
+	max-width: 300px;
+}
+
+a:link, a:visited {
+	color: white;
+	text-decoration: none;
+	border-style: groove;
+	border-width: 4px;
+	padding: 10px;
+	border-radius: 100px;
+}
+
+a:hover, a:active {
+	color: rgb(2, 205, 255);
+	text-decoration: none;
+	border-width: 6px;
+	border-style: groove;
+	padding: 7px;
+	border-color: rgb(2, 205, 255);
+}
