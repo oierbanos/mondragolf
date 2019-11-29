@@ -1,0 +1,16 @@
+//....................................................................
+	if (ball.position.x <= 350 && ball.position.x >= 300 ) {                     
+		ctx.arc(0, 0, ball.radius, 0, Math.PI*2, true);
+		ball.position.y=height++;
+		ball.position.y = height - ball.radius;
+		if (height>=650) {
+    		ctx.clearRect(ball.position.x-10,ball.position.y-11,ball.position.x+5,ball.position.y+5);
+    		ball.position.y = height - ball.radius;
+			ball.position.y = 200;
+			ball.position.x = 200;
+			height=800;
+			ball.position.y = height - ball.radius;      
+		}
+	}
+	
+	//......................................................................
