@@ -63,3 +63,8 @@ a:hover, a:active {
 	padding: 7px;
 	border-color: rgb(2, 205, 255);
 }
+audio {
+		position: relative;
+		left: 75%;
+		top: 500px;
+	}
