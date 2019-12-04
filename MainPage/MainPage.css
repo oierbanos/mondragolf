@@ -36,7 +36,7 @@ div#links {
 	font-size: 28px;
 	text-align: center;
 	position: fixed;
-	top: 50%;
+	top: 60%;
 	left: 43%;
 }
 
@@ -62,4 +62,9 @@ a:hover, a:active {
 	border-style: groove;
 	padding: 7px;
 	border-color: rgb(2, 205, 255);
+}
+audio {
+		position: relative;
+		left: 1%;
+		top: -100px;
 }
