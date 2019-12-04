@@ -83,7 +83,7 @@ var setup = function() {
 function rodarsuelo(){
 	if (ball.position.y > height-101 - ball.radius){ //Cuando esté en entre el suelo y la altura de 1px
 		ball.velocity.x *= 0.95; //Se hace solo x0.98 porque se hace cada 15ms, cuanto mayor sea el intervalo, menor la multiplicación, se haría x 0.95 (por ejemplo)
-		if (ball.position.x >= 500 && ball.position.x <= 900){
+		if (ball.position.x >= 500 && ball.position.x <= 650){
 			ball.velocity.x *= 0.60;
 		}
 		
@@ -113,7 +113,7 @@ var loop = function() {
     }
 
     // Collisiones
-	if (ball.position.x >= 500 && ball.position.x <= 900){
+	if (ball.position.x >= 500 && ball.position.x <= 650){
 		if (ball.position.y > height-100 - ball.radius) {
 				ball.velocity.y *= ball.restitutionarena; //Que bote tendrá
 				ball.position.y = height-100 - ball.radius; //Que no traspase el suelo
@@ -164,7 +164,7 @@ var loop = function() {
 	
 	
 	ctx.moveTo(500, height-100);
-	ctx.lineTo(900, height-100);
+	ctx.lineTo(650, height-100);
 	ctx.stroke();
     // Dibujar línea de angulo y potencia
     if (mouse.isDown) {
