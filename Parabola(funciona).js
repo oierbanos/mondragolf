@@ -7,7 +7,6 @@ var frameDelay = frameRate * 1000; // ms
 var hoyo = 500;
 var hondoa = '#003399';
 var kontagailua = 0;
-    
 
 var img = new Image();
 	img.src = 'api.png';
@@ -48,6 +47,11 @@ var ball = {
 	amaitu: false,
 	ilargian: false,
     };
+
+var Xabiadura = ball.velocity.x.toFixed(2);
+var Yabiadura = ball.velocity.y.toFixed(2);
+var Xposizioa = ball.position.x.toFixed(2);
+var Yposizioa = ball.position.y.toFixed(2);
 
 //Constantes necesarias para las 
 var ResisAire = 0.47;  // Resistencia que opone una esfera
@@ -203,7 +207,6 @@ function berriro(){
 		hondoa = 'black';
 		img.src = 'sueloluna.png';
 		bandera.src = 'Bandera.png';
-		sol.src = 'SolLuna.png';
 		warning.src = 'alien.png';
 	}
 	if(mouse.isDown && ball.amaitu && ball.ilargian){
@@ -246,6 +249,8 @@ var loop = function() {
 			// Conseguir nueva posicion
 			ball.position.x += ball.velocity.x*frameRate*40;
 			ball.position.y += ball.velocity.y*frameRate*40;
+			
+			
 		}
 		
 		// Collisiones
@@ -332,7 +337,6 @@ var loop = function() {
 		}
 		else {
 			ctx.drawImage(img, 0, canvas.height-150, 2700, 150);
-			ctx.drawImage(sol, 0, 0, 400, 400);
 			ctx.drawImage(warning, width - 400, height-1120, 440, 1120);
 		}
 		
@@ -353,7 +357,39 @@ var loop = function() {
 		
 		ctx.restore();
 
-
+		Xabiadura = ball.velocity.x.toFixed(2);
+		Yabiadura = ball.velocity.y.toFixed(2);
+		Xposizioa = ball.position.x.toFixed(2);
+		Yposizioa = ball.position.y.toFixed(2);
+			
+		if(ball.ilargian){
+			ctx.font = "15px Courier";
+			ctx.fillStyle = 'white';
+			ctx.fillText("Abiadura x: " + Xabiadura, 10, 10);
+			ctx.font = "15px Courier";
+			ctx.fillStyle = 'white';
+			ctx.fillText("Abiadura y: " + Yabiadura, 175, 10);
+			ctx.font = "15px Courier";
+			ctx.fillStyle = 'white';
+			ctx.fillText("Posizio x: " + Xposizioa, 10, 30);
+			ctx.font = "15px Courier";
+			ctx.fillStyle = 'white';
+			ctx.fillText("Posizio x: " + Yposizioa, 175, 30);
+		}
+		else{
+			ctx.font = "15px Courier";
+			ctx.fillStyle = 'black';
+			ctx.fillText("Abiadura x: " + Xabiadura, 10, 10);
+			ctx.font = "15px Courier";
+			ctx.fillStyle = 'black';
+			ctx.fillText("Abiadura y: " + Yabiadura, 175, 10);
+			ctx.font = "15px Courier";
+			ctx.fillStyle = 'black';
+			ctx.fillText("Posizio x: " + Xposizioa, 10, 30);
+			ctx.font = "15px Courier";
+			ctx.fillStyle = 'black';
+			ctx.fillText("Posizio x: " + Yposizioa, 175, 30);
+		}
 		// Dibujar línea de angulo y potencia
 		if (mouse.isDown && ball.velocity.x < 0.1) {
 			ctx.beginPath();
