@@ -375,7 +375,7 @@ var loop = function() {
 			ctx.fillText("Posizio x: " + Xposizioa, 10, 30);
 			ctx.font = "15px Courier";
 			ctx.fillStyle = 'white';
-			ctx.fillText("Posizio x: " + Yposizioa, 175, 30);
+			ctx.fillText("Posizio y: " + Yposizioa, 175, 30);
 		}
 		else{
 			ctx.font = "15px Courier";
@@ -389,7 +389,7 @@ var loop = function() {
 			ctx.fillText("Posizio x: " + Xposizioa, 10, 30);
 			ctx.font = "15px Courier";
 			ctx.fillStyle = 'black';
-			ctx.fillText("Posizio x: " + Yposizioa, 175, 30);
+			ctx.fillText("Posizio y: " + Yposizioa, 175, 30);
 		}
 		// Dibujar línea de angulo y potencia
 		if (mouse.isDown && ball.velocity.x < 0.1) {
