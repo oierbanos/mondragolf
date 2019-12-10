@@ -42,7 +42,14 @@ var Yposizioa = ball.position.y.toFixed(2);
 //Constantes necesarias para las 
 var ResisAire = 0.47;  // Resistencia que opone una esfera
 var Vol = (4/3)*Math.PI*ball.radius*ball.radius*ball.radius;
-var rho = ball.mass/Vol; // Densidad
+if (ball.uretan)
+{
+	var rho=40;
+}
+else
+{
+	var rho = ball.mass/Vol; // Densidad
+}
 var A = Math.PI * ball.radius * ball.radius / (10000); // Azalera
 var g = 9.81;  // gravedad
 var mouse = {x: 0, y: 0, isDown: false};
@@ -313,7 +320,6 @@ var loop = function() {
 				if(ball.position.y>=height-ball.zabalera-5 && ball.position.y<=height-ball.zabalera && !ball.ilargian){
 					ball.position.y+=0.5;
 					ball.position.y = height - ball.zabalera;
-					ball.position.y = height - ball.zabalera - 40;
 					ball.position.x=462;
 				}
 				ball.uretan=false;
