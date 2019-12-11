@@ -44,7 +44,7 @@ var ResisAire = 0.47;  // Resistencia que opone una esfera
 var Vol = (4/3)*Math.PI*ball.radius*ball.radius*ball.radius;
 if (ball.uretan)
 {
-	var rho=40;
+	rho=40;
 }
 else
 {
@@ -128,6 +128,13 @@ function rodarsuelo(){
 			ball.velocity.x *= 0.60;
 		}
 	}
+}
+function aterauretik(){
+	ball.uretan=false;
+	ball.position.x = 467;
+	ball.velocity.x = 0;
+	ball.velocity.y = 0;
+	rho = ball.mass/Vol;
 }
 
 function color(){
@@ -255,9 +262,6 @@ var loop = function() {
 		if ((ball.position.x < width - hoyo && ball.position.x + ball.zabalera > width - hoyo && ball.velocity.x < 1.8 && ball.velocity.x > -1.8 && ball.position.y >= height - ball.zabalera - 43) || (ball.position.x < width - hoyo - 2 && ball.position.x + ball.zabalera > width - hoyo && ball.position.y >= height - ball.zabalera - 43 && Math.abs(ball.velocity.y) >= 0.25)){
 			ball.barruan = true;
 		}
-		if (ball.position.x>=361 && ball.position.x<=456 && !ball.ilargian){
-			ball.uretan = true;
-		}
 		if(ball.barruan){
 			if (ball.position.x > width - hoyo  && ball.position.y > height - ball.zabalera - 40){
 				ball.velocity.x *= ball.restitution;
@@ -316,14 +320,29 @@ var loop = function() {
 					}
 				}
 			}
-			else if (!ball.ilargian){
-				if(ball.position.y>=height-ball.zabalera-5 && ball.position.y<=height-ball.zabalera && !ball.ilargian){
-					ball.position.y+=0.5;
-					ball.position.y = height - ball.zabalera;
-					ball.position.x=462;
-				}
-				ball.uretan=false;
+			if (ball.position.x>=361 && ball.position.x<=456 && ball.position.y > height - ball.zabalera - 44 &&!ball.ilargian){
+				ball.uretan = true;
 			}
+			if (!ball.ilargian && ball.uretan){
+				
+				if(ball.position.y > height - ball.zabalera - 36 ){
+					ball.velocity.x *= 0.90;
+					rho=40;
+				}
+				if (ball.position.x < 361 && ball.position.y > height - ball.zabalera - 40){
+					ball.velocity.x *= ball.restitution;
+					ball.position.x = 361;
+				}
+				if (ball.position.x > 456 && ball.position.y > height - ball.zabalera - 40){
+					ball.velocity.x *= ball.restitution;
+					ball.position.x = 456;
+				}
+				if(ball.position.y > height - ball.zabalera - ball.radius){
+					ball.position.y = height - ball.zabalera - ball.radius;
+					setTimeout('aterauretik()', 500);
+				}
+			}
+
 		}
 		
 		if(width !=  window.innerWidth || height !=  window.innerHeight){
@@ -355,7 +374,7 @@ var loop = function() {
 			ctx.drawImage(warning, width - 200, height-200, 100, 200);
 			ctx.drawImage(sol, width-400, 0, 400, 400);
 			ctx.drawImage(img, 0, canvas.height-150, 2700, 150);
-			ctx.drawImage(agua,387,465,85,167);
+			ctx.drawImage(agua,387,height-155,85,167);
 		}
 		else {
 			ctx.drawImage(img, 0, canvas.height-150, 2700, 150);
