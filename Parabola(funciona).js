@@ -1,4 +1,3 @@
-
 var width = window.innerWidth;
 var height = window.innerHeight;
 var canvas = ctx = false;
@@ -18,7 +17,8 @@ var warning = new Image();
 	warning.src = 'Warning.png';
 var bandera = new Image();
 	bandera.src = 'Bandera2.png';
-
+var agua = new Image();
+	agua.src = 'ura.png';
  
 var ball = {
     position: {x: 100, y: height-55},
@@ -28,9 +28,9 @@ var ball = {
 	restitution: -0.35,
 	restitutionarena: -0.2,
 	zabalera: 25,
-	uran: false,
 	barruan: false,
 	amaitu: false,
+	uretan: false,
 	ilargian: false,
     };
 
@@ -42,7 +42,14 @@ var Yposizioa = ball.position.y.toFixed(2);
 //Constantes necesarias para las 
 var ResisAire = 0.47;  // Resistencia que opone una esfera
 var Vol = (4/3)*Math.PI*ball.radius*ball.radius*ball.radius;
-var rho = ball.mass/Vol; // Densidad
+if (ball.uretan)
+{
+	rho=40;
+}
+else
+{
+	var rho = ball.mass/Vol; // Densidad
+}
 var A = Math.PI * ball.radius * ball.radius / (10000); // Azalera
 var g = 9.81;  // gravedad
 var mouse = {x: 0, y: 0, isDown: false};
@@ -122,6 +129,13 @@ function rodarsuelo(){
 		}
 	}
 }
+function aterauretik(){
+	ball.uretan=false;
+	ball.position.x = 467;
+	ball.velocity.x = 0;
+	ball.velocity.y = 0;
+	rho = ball.mass/Vol;
+}
 
 function color(){
 	
@@ -152,16 +166,16 @@ function color(){
 function irabazi(){
 	if(!ball.ilargian){
 		ctx.font = "48px Courier";
-		ctx.fillStyle = 'black';
+		ctx.fillStyle = 'white';
 		ctx.fillText("ZORIONAK!!", (width - 400) / 2 + 40, height / 2 - 60);
 		ctx.font = "48px Courier";
-		ctx.fillStyle = 'black';
+		ctx.fillStyle = 'white';
 		ctx.fillText("IRABAZI DUZU", (width - 400)/ 2, height / 2);
 		ctx.font = "24px Courier";
-		ctx.fillStyle = 'black';
+		ctx.fillStyle = 'white';
 		ctx.fillText("Klik egin Ilargian jolasteko", (width - 400)/ 2 - 20, height / 2 + 30);
 		ctx.font = "24px Courier";
-		ctx.fillStyle = 'black';
+		ctx.fillStyle = 'white';
 		if(kontagailua == 1) ctx.fillText("ZUZENEAN SARTU DUZU!!", (width - 400)/ 2 + 25, height / 2 + 70);
 		else ctx.fillText("Egindako tiroak: " + kontagailua, (width - 400)/ 2 + 25, height / 2 + 70);
 	}
@@ -203,6 +217,7 @@ function berriro(){
 		ball.ilargian = false;
 		ball.amaitu = false;
 		ball.barruan = false;
+		ball.uretan = false;
 		ball.position.x = 100;
 		ball.position.y = height-55;
 		ball.velocity.x = 0;
@@ -212,7 +227,8 @@ function berriro(){
 		img.src = 'api.png';
 		bandera.src = 'Bandera2.png';
 		sol.src = 'Sol.png';
-		warning.src = 'Warning.png'
+		warning.src = 'Warning.png';
+		agua.src='ura.png';
 	}
 	
 }
@@ -246,7 +262,6 @@ var loop = function() {
 		if ((ball.position.x < width - hoyo && ball.position.x + ball.zabalera > width - hoyo && ball.velocity.x < 1.8 && ball.velocity.x > -1.8 && ball.position.y >= height - ball.zabalera - 43) || (ball.position.x < width - hoyo - 2 && ball.position.x + ball.zabalera > width - hoyo && ball.position.y >= height - ball.zabalera - 43 && Math.abs(ball.velocity.y) >= 0.25)){
 			ball.barruan = true;
 		}
-		
 		if(ball.barruan){
 			if (ball.position.x > width - hoyo  && ball.position.y > height - ball.zabalera - 40){
 				ball.velocity.x *= ball.restitution;
@@ -266,43 +281,67 @@ var loop = function() {
 		}
 
 		else if (! ball.barruan){
-			if (ball.position.x >= 470 && ball.position.x <= 670 && !ball.ilargian){
-				if (ball.position.y > height - ball.zabalera - 40) {
-						ball.velocity.y *= ball.restitutionarena; //Que bote tendrá
+			if (!ball.uretan)
+			{
+				if (ball.position.x >= 470 && ball.position.x <= 670 && !ball.ilargian){
+					if (ball.position.y > height - ball.zabalera - 40) {
+							ball.velocity.y *= ball.restitutionarena; //Que bote tendrá
+							ball.position.y = height - ball.zabalera - 40; //Que no traspase el suelo
+					}
+					if ( ball.velocity.x < 0.25 && ball.velocity.x > -0.25){
+						ball.velocity.x = 0;
+					}
+				}
+				
+				else{
+					if (ball.position.y > height - ball.zabalera - 40) {
+						ball.velocity.y *= ball.restitution; //Que bote tendrá
 						ball.position.y = height - ball.zabalera - 40; //Que no traspase el suelo
-				}
-				if ( ball.velocity.x < 0.25 && ball.velocity.x > -0.25){
-					ball.velocity.x = 0;
+		
+					}
+					if (ball.position.x > width - 200 - ball.radius && ball.velocity.x == 0 || ball.position.y < -200 || ball.position.x > width + 250 || ball.position.x < -200 || (ball.position.x < 0 && ball.velocity.x == 0)) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
+						ball.velocity.x = 0; //Empieza parada
+						ball.velocity.y = 0;
+						ball.position.x = 100 + ball.radius;
+						ball.position.y = height - ball.zabalera - 40; 
+					}
+					if (ball.ilargian && (ball.position.x < 0 && ball.velocity.x == 0)){
+						ball.velocity.x = 0; //Empieza parada
+						ball.velocity.y = 0;
+						ball.position.x = 100 + ball.radius;
+						ball.position.y = height - ball.zabalera - 40; 
+					}
+					if (ball.ilargian && ball.position.x > width - 360 && ball.position.y > height - 1120){
+						ball.velocity.x *= ball.restitution;
+						ball.position.x = width - 360;
+					}
+					if ( ball.velocity.x < 0.25 && ball.velocity.x > -0.25){
+						ball.velocity.x = 0;
+					}
 				}
 			}
-			else{
-				if (ball.position.y > height - ball.zabalera - 40) {
-					ball.velocity.y *= ball.restitution; //Que bote tendrá
-					ball.position.y = height - ball.zabalera - 40; //Que no traspase el suelo
-	
+			if (ball.position.x>=361 && ball.position.x<=456 && ball.position.y > height - ball.zabalera - 44 &&!ball.ilargian){
+				ball.uretan = true;
+			}
+			if (!ball.ilargian && ball.uretan){
+				
+				if(ball.position.y > height - ball.zabalera - 36 ){
+					ball.velocity.x *= 0.90;
+					rho=40;
 				}
-				if (ball.position.x > width - 200 - ball.radius && ball.velocity.x == 0 || ball.position.y < -200 || ball.position.x > width + 250 || ball.position.x < -200 || (ball.position.x < 0 && ball.velocity.x == 0)) { //Si se pasa del límite de el campo de golf, vuelve al inicio.
-					ball.velocity.x = 0; //Empieza parada
-					ball.velocity.y = 0;
-					ball.position.x = 100 + ball.radius;
-					ball.position.y = height - ball.zabalera - 40; 
-				}
-				if (ball.ilargian && (ball.position.x < 0 && ball.velocity.x == 0)){
-					ball.velocity.x = 0; //Empieza parada
-					ball.velocity.y = 0;
-					ball.position.x = 100 + ball.radius;
-					ball.position.y = height - ball.zabalera - 40; 
-				}
-				if (ball.ilargian && ball.position.x > width - 360 && ball.position.y > height - 1120){
+				if (ball.position.x < 361 && ball.position.y > height - ball.zabalera - 40){
 					ball.velocity.x *= ball.restitution;
-					ball.position.x = width - 360;
+					ball.position.x = 361;
 				}
-				if ( ball.velocity.x < 0.25 && ball.velocity.x > -0.25){
-					ball.velocity.x = 0;
+				if (ball.position.x > 456 && ball.position.y > height - ball.zabalera - 40){
+					ball.velocity.x *= ball.restitution;
+					ball.position.x = 456;
+				}
+				if(ball.position.y > height - ball.zabalera - ball.radius){
+					ball.position.y = height - ball.zabalera - ball.radius;
+					setTimeout('aterauretik()', 500);
 				}
 			}
-
-			
 
 		}
 		
@@ -335,6 +374,7 @@ var loop = function() {
 			ctx.drawImage(warning, width - 200, height-200, 100, 200);
 			ctx.drawImage(sol, width-400, 0, 400, 400);
 			ctx.drawImage(img, 0, canvas.height-150, 2700, 150);
+			ctx.drawImage(agua,387,height-155,85,167);
 		}
 		else {
 			ctx.drawImage(img, 0, canvas.height-150, 2700, 150);
@@ -342,7 +382,6 @@ var loop = function() {
 		}
 		
 		ctx.drawImage(bandera, width - 500, height-121, 28, 130);
-
 		
 		
 		
